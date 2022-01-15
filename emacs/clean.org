@@ -1,0 +1,156 @@
+Awesome Posum config
+
+* General settings
+
+** Don't show tool bar mode
+   #+BEGIN_SRC emacs-lisp
+   (tool-bar-mode -1)
+   #+END_SRC
+
+** Don't show scrollbar 
+   #+BEGIN_SRC emacs-lisp
+   (scroll-bar-mode -1)
+   #+END_SRC
+
+** Don't show menu
+   #+BEGIN_SRC emacs-lisp
+   (menu-bar-mode -1)
+   #+END_SRC
+
+** Highlight line
+   #+BEGIN_SRC emacs-lisp
+;;   (global-hl-line-mode t)
+   (delete-selection-mode t)
+   #+END_SRC
+
+** electric-mode
+   #+BEGIN_SRC emacs-lisp
+   (electric-pair-mode t)
+   (show-paren-mode t)
+   #+END_SRC
+
+** Delete selection
+   #+BEGIN_SRC emacs-lisp
+   (delete-selection-mode t)
+   #+END_SRC
+   
+** Company mode
+   #+BEGIN_SRC emacs-lisp
+   (setq company-dabbrev-downcase 0)
+   (setq company-idle-delay 0)
+
+   ; Show suggestions after entering one character.
+   (setq company-minimum-prefix-length 1)
+
+   ; Use tab key to cycle through suggestions.
+   ; ('tng' means 'tab and go')
+   ;(company-tng-configure-default)
+
+   #+END_SRC
+** Display line numbers when programming
+   #+BEGIN_SRC emacs-lisp
+   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+   #+END_SRC
+
+* UI
+
+* Modes
+
+** IDO
+   #+BEGIN_SRC emacs-lisp
+   (setq ido-everywhere t)
+   (setq ido-enable-flex-matching t)
+   (ido-mode t)
+   #+END_SRC
+
+* General packages
+
+** which key
+   #+BEGIN_SRC emacs-lisp
+   (use-package which-key
+     :ensure t
+     :config (which-key-mode))
+   #+END_SRC
+
+** Projectile
+   #+BEGIN_SRC emacs-lisp
+   (use-package projectile
+     :ensure t)
+   #+END_SRC
+
+** Treemacs
+   #+BEGIN_SRC emacs-lisp
+   (use-package treemacs
+     :ensure t
+     :bind
+       (:map global-map
+       ([f8] . treemacs)
+       ("C-<f8> . treemacs-select-window"))
+     :config
+       (setq treemacs-is-never-other-window t))
+   #+END_SRC
+** Company
+   #+BEGIN_SRC emacs-lisp
+   (use-package company
+     :ensure t
+     :init
+     (add-hook 'after-init-hook 'global-company-mode))
+   #+END_SRC
+** Jedi
+    #+BEGIN_SRC emacs-lisp
+    (use-package company-jedi
+      :ensure t
+      :config
+      (defun company/python-mode-hook ()
+        (push 'company-jedi company-backends))
+      (add-hook 'python-mode-hook 'company/python-mode-hook))
+    #+END_SRC
+# ** Elpy
+#    #+BEGIN_SRC emacs-lisp
+#    (use-package elpy
+#      :ensure t
+#      :init
+#      (elpy-enable))
+#    #+END_SRC
+
+** Rustic config
+   #+BEGIN_SRC emacs-lisp
+     (use-package rustic)
+     (setq rustic-lsp-server 'rls)
+
+   #+END_SRC
+** eglot and glpls
+   #+BEGIN_SRC emacs-lisp
+     (require 'project)
+
+     (defun project-find-go-module (dir)
+       (when-let ((root (locate-dominating-file dir "go.mod")))
+	 (cons 'go-module root)))
+
+     (cl-defmethod project-root ((project (head go-module)))
+       (cdr project))
+
+     (add-hook 'project-find-functions #'project-find-go-module)
+
+     ;; Optional: load other packages before eglot to enable eglot integrations.
+     (require 'company)
+     (require 'yasnippet)
+
+     (require 'go-mode)
+     (require 'eglot)
+     (add-hook 'go-mode-hook 'eglot-ensure)
+
+     ;; Optional: install eglot-format-buffer as a save hook.
+     ;; The depth of -10 places this before eglot's willSave notification,
+     ;; so that that notification reports the actual contents that will be saved.
+     (defun eglot-format-buffer-on-save ()
+       (add-hook 'before-save-hook #'eglot-format-buffer -10 t))
+     (add-hook 'go-mode-hook #'eglot-format-buffer-on-save)
+
+     (setq-default eglot-workspace-configuration
+		   '((:gopls .
+			     ((staticcheck . t)
+			      (matcher . "CaseSensitive")))))
+
+
+   #+END_SRC
