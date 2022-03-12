@@ -1,4 +1,4 @@
 # Dotfiles
 
 ## Screenshot
-![](https://imgur.com/KLaysRA)
+![](screenshots/screenshot.png)
