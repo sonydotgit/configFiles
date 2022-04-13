@@ -4,8 +4,17 @@ set nocompatible
 " Enable type file detection. Vim will be able to try to detect the type of file in use.
 filetype on
 
+" Display verticle line at column 80
+set colorcolumn=80
+
 " Enable plugins and load plugin for the detected file type.
 filetype plugin on
+
+" vimtex fold
+" g:vimtex_fold_enabled
+
+" PDF Viewer for tex live preview
+let g:livepreview_previewer = 'zathura'
 
 " Load an indent file for the detected file type.
 filetype indent on
@@ -23,13 +32,13 @@ set cursorline
 " set cursorcolumn
 
 " Set netrw listing type
-let g:netrw_liststyle = 3
+let g:netrw_liststyle=3
 
 " Don't load files in netrw window
-let g:netrw_browse_split = 4
+let g:netrw_browse_split=4
 
 " Set netrw split width
-let g:netrw_winsize = 20
+let g:netrw_winsize=20
 
 " Set shift width to 4 spaces.
 set shiftwidth=4
@@ -65,7 +74,7 @@ set showmode
 set showmatch
 
 " Use highlighting when doing a search.
-set hlsearch
+" set hlsearch
 
 " Enable auto completion menu after pressing TAB.
 set wildmenu
@@ -81,8 +90,11 @@ set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
 call plug#begin('~/.vim/plugged')
 
+  Plug 'lervag/vimtex'
   Plug 'preservim/nerdtree'
   Plug 'rust-lang/rust.vim'
+  Plug 'mattn/emmet-vim'
+  Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 call plug#end()
 
@@ -115,3 +127,7 @@ augroup END
 " Status bar code goes here.
 
 " }}}
+"Added by android-vim:
+set tags+=/home/sony/.vim/tags
+autocmd Filetype java setlocal omnifunc=javacomplete#Complete
+let g:SuperTabDefaultCompletionType = 'context'
